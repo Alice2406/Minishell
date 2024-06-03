@@ -6,7 +6,7 @@
 #    By: aniezgod <aniezgod@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/06 15:29:56 by aniezgod          #+#    #+#              #
-#    Updated: 2024/03/06 15:41:04 by aniezgod         ###   ########.fr        #
+#    Updated: 2024/06/03 11:23:34 by aniezgod         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRCS = ./srcs/main.c
 OBJS = ${SRCS:.c=.o}
 
 NAME = minishell
-INCS = -I ./includes
+INCS = -I ./includes -I ./libft/includes
 READLINE_FLAGS = -L /usr/lib/x86_64-linux-gnu -lreadline
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
@@ -44,16 +44,20 @@ $(NAME): $(OBJS)
 			@printf "${WHITE}${BOLD}╔════════════════════════════════════════════════════════════════════════════╗\n"
 			@printf "${BOLD}║                              .: COMPILATION :.                             ║\n"
 			@printf "${BOLD}╚════════════════════════════════════════════════════════════════════════════╝\n"
-			@$(CC) $(CFLAGS) $(INCS) $(OBJS) -o $(NAME) $(READLINE_FLAGS)
+			@${MAKE} -C ./libft
+			@printf "${BOLD}║                                    ${PURPLE}libft                                   ${WHITE}║\n"
+			@$(CC) $(CFLAGS) $(INCS) $(OBJS) -o $(NAME) $(READLINE_FLAGS) libft/libft.a
 			@printf "${BOLD}║                                   ${PURPLE}${NAME}                                    ${WHITE}║\n"
 			@printf "${BOLD}╚════════════════════════════════════════════════════════════════════════════╝\n"
 
 clean:
-			@${RM} ${OBJS}
+			@${RM} ${OBJS} 
+			@${MAKE} -C libft clean
 			
 fclean: clean
 			@printf "${BOLD}Entreprise de nettoyage bonjour ?\n"
-			@${RM} ${NAME}
+			@${RM} ${NAME} 
+			@${MAKE} -C libft fclean
 			@printf "${BOLD}${GREEN}Tout est propre !✨\n"
 
 re: fclean all
